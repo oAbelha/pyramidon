@@ -19,7 +19,7 @@ export default createVuetify({
     aliases,
     sets: {
       mdi
-    
+
     },
     themes: {
       light: {
@@ -38,4 +38,5 @@ export default createVuetify({
         }
       }
     },
+  }
 })

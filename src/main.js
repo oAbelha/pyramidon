@@ -22,4 +22,4 @@ const app = createApp(App)
 
 registerPlugins(app)
 
-app.use(vuetify).mount('#app')
+app.mount('#app')
