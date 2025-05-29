@@ -6,7 +6,6 @@
 
 // Composables
 import { createRouter, createWebHistory } from 'vue-router/auto';
-import DefaultLayout from '@/layouts/Default.vue';
 import Login from '@/pages/Login.vue';
 import Home from '@/pages/Home.vue';
 import Organizacoes from '@/pages/Organizacoes.vue';
@@ -21,17 +20,6 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
-  },
-  {
-    path: '/app',
-    component: DefaultLayout,
-    children: [
-      {
-        path: '/dashboard',
-        name: 'Dashboard',
-        component: Dashboard,
-      },
-    ],
   },
   {
     path: '/organizacoes',
