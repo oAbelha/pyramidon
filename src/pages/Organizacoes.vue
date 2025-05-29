@@ -1,7 +1,7 @@
 <template>
   <v-app theme="dark">
-    <v-container height="100vh">
-      <div style="height: 10%;" class="d-flex align-center justify-space-between">
+    <v-container>
+      <div class="d-flex align-center justify-space-between">
         <div>
           <h1>Minhas Organizações</h1>
         </div>
@@ -14,7 +14,7 @@
         </div>
       </div>
   
-      <v-container height="90%" class="d-flex ga-sm-6 justify-start flex-wrap flex-row">
+      <v-container class="d-flex ga-sm-6 justify-start flex-wrap flex-row">
         <v-card
           v-for="org in organizacoes"
           :key="org"
