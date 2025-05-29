@@ -6,8 +6,8 @@
 
 // Composables
 import { createRouter, createWebHistory } from 'vue-router/auto'
-import Login from '@/pages/Login.vue'
 import Home from '@/pages/Home.vue';
+import colaboradores from '@/pages/colaboradores.vue'
 
 const routes = [
   {
@@ -16,9 +16,9 @@ const routes = [
     component: Home,
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: Login,
+    path: '/colaboradores',
+    name: 'colaboradores',
+    component: colaboradores,
   },
 ];
 
