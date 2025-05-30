@@ -13,6 +13,11 @@ import { createVuetify } from 'vuetify'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
+  defaults: {
+    VRow: {
+      style: 'margin: 0 !important;'
+    }
+  },
    theme: {
     themes: {
       light: {

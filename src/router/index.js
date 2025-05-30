@@ -5,20 +5,27 @@
  */
 
 // Composables
-import { createRouter, createWebHistory } from 'vue-router/auto'
-import Login from '@/pages/Login.vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import Marketing from '@/pages/Marketing.vue'
 import Home from '@/pages/Home.vue';
+import layoutNavBar from '@/layouts/layoutNavBar.vue';
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    component: layoutNavBar,
+    children: [
+      {
+        path: 'marketing',
+        name: 'marketing',
+        component: Marketing,
+      },
+    ]
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: Login,
+    path: '/home',
+    name: 'home',
+    component: Home,
   },
 ];
 
