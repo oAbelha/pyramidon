@@ -10,6 +10,8 @@ import Login from '@/pages/Login.vue';
 import Home from '@/pages/Home.vue';
 import Organizacoes from '@/pages/Organizacoes.vue';
 import LayoutBarTop from '@/layouts/LayoutBarTop.vue';
+import Marketing from '@/pages/Marketing.vue';
+import layoutNavBar from '@/layouts/layoutNavBar.vue';
 
 const routes = [
   {
@@ -24,13 +26,19 @@ const routes = [
   },
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    component: layoutNavBar,
+    children: [
+      {
+        path: 'marketing',
+        name: 'marketing',
+        component: Marketing,
+      },
+    ]
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: Login,
+    path: '/home',
+    name: 'home',
+    component: Home,
   },
   {
     path: '/organizacoes',
