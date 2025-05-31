@@ -5,7 +5,9 @@
  */
 
 // Composables
-import { createRouter, createWebHistory } from 'vue-router/auto';
+import { createRouter, createWebHistory } from 'vue-router/auto'
+import Home from '@/pages/Home.vue';
+import colaboradores from '@/pages/colaboradores.vue'
 import Login from '@/pages/Login.vue';
 import Home from '@/pages/Home.vue';
 import Organizacoes from '@/pages/Organizacoes.vue';
@@ -39,6 +41,11 @@ const routes = [
     path: '/home',
     name: 'home',
     component: Home,
+  },
+  {
+    path: '/colaboradores',
+    name: 'colaboradores',
+    component: colaboradores,
   },
   {
     path: '/organizacoes',
