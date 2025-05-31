@@ -5,12 +5,26 @@
  */
 
 // Composables
-import { createRouter, createWebHistory } from 'vue-router'
-import Marketing from '@/pages/Marketing.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import Marketing from '@/pages/Marketing.vue';
+import colaboradores from '@/pages/colaboradores.vue';
+import Login from '@/pages/Login.vue';
 import Home from '@/pages/Home.vue';
+import Organizacoes from '@/pages/Organizacoes.vue';
+import LayoutBarTop from '@/layouts/LayoutBarTop.vue';
 import layoutNavBar from '@/layouts/layoutNavBar.vue';
 
 const routes = [
+  {
+    path: '/app/',
+    component: LayoutBarTop,
+    children: [
+      {
+        path: 'organizacoes',
+        component: Organizacoes,
+      },
+    ],
+  },
   {
     path: '/',
     component: layoutNavBar,
@@ -26,6 +40,16 @@ const routes = [
     path: '/home',
     name: 'home',
     component: Home,
+  },
+  {
+    path: '/colaboradores',
+    name: 'colaboradores',
+    component: colaboradores,
+  },
+  {
+    path: '/organizacoes',
+    name: 'Organizacoes',
+    component: Organizacoes,
   },
 ];
 
