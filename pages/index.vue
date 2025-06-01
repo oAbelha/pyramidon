@@ -1,5 +1,5 @@
 <template>
-  <v-app theme="dark">
+  <v-app>
     <v-main>
       <v-row class="align-center justify-space-between pr-3 pl-16 py-2">
         <span class="font-weight-thin">PYRAMIDON</span>
@@ -16,7 +16,7 @@
           <v-btn class="w-25 rounded-lg bg-yellow" height="60" text="Comece agora"/>
         </v-col>
         <v-col class="d-flex justify-center">
-          <v-img src="../assets/logo.png" max-width="650"/>
+          <v-img src="../assets/logo.png" max-width="615"/>
         </v-col>
       </v-row>
     </v-main>
