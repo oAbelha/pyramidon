@@ -16,7 +16,7 @@
           <v-btn class="w-25 rounded-lg bg-yellow" height="60" text="Comece agora"/>
         </v-col>
         <v-col class="d-flex justify-center">
-          <v-img src="../assets/logo.png" max-width="615"/>
+          <v-img src="../assets/logo.png" max-width="840"/>
         </v-col>
       </v-row>
     </v-main>
@@ -37,9 +37,3 @@ export default {
   methods: {},
 };
 </script>
-
-<style>
-.v-row {
-  margin: 0px !important;
-}
-</style>
