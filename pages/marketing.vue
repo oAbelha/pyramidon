@@ -82,44 +82,29 @@ export default {
       status: null,
       linkImagem: null,
       headers: [
-        { title: "Titulo", value: "titulo", align: "center" },
-        { title: "Descrição", value: "descricao", align: "center" },
-        { title: "Status", value: "status", align: "center" },
-        { title: "Visualizações", value: "visualizacoes", align: "center" },
-        { title: "Imagem", value: "link_imagem", align: "center" },
+        { title: "Rede social", value: "nome_rede_social", align: "center" },
+        { title: "Perfil", value: "nome_perfil", align: "center" },
+        { title: "@ do perfil", value: "arroba_perfil", align: "center" },
+        { title: "Link de acesso", value: "link_acesso", align: "center" },
+        { title: "Responsável", value: "responsavel", align: "center" },
         { title: "Ações", value: "actions", align: "center", width: "100" },
       ],
-      posts: [
-        {
-          id: 1,
-          titulo: "Promoção de Verão",
-          descricao:
-            "Descontos especiais em todos os serviços até o final do mês.",
-          status: "Ativo",
-          visualizacoes: 123,
-          link_imagem: "https://cdn.vuetifyjs.com/images/parallax/material.jpg",
-        },
-        {
-          id: 2,
-          titulo: "Black Friday",
-          descricao: "Pacotes promocionais com até 70% de desconto.",
-          status: "Inativo",
-          visualizacoes: 456,
-          link_imagem: "https://picsum.photos/500?image=3",
-        },
-        {
-          id: 3,
-          titulo: "Novo serviço",
-          descricao: "Agora oferecemos consultoria de marketing digital.",
-          status: "Ativo",
-          visualizacoes: 89,
-          link_imagem: "https://picsum.photos/500?image=14",
-        },
-      ],
+      posts: [],
     };
   },
 
+  async created() {
+    await this.listarPerfisMarketing();
+  },
+
   methods: {
+    async listarPerfisMarketing() {
+      const { data: response } = await this.$api.get("/marketing/get");
+      console.log( response);
+      
+      this.posts = response.data;
+    },
+
     verPost(item) {
       this.postSelecionado = item;
       this.dialogExibePost = true;
@@ -134,16 +119,6 @@ export default {
       this.linkImagem = null;
     },
 
-    ativaInativaPost(postSelecionado) {
-      if (postSelecionado.status == "Inativo") {
-        this.postSelecionado.status = "Ativo";
-      } else {
-        this.postSelecionado.status = "Inativo";
-      }
-
-      this.dialogExibePost = false;
-    },
-
     editarPost(item) {
       this.modoEdicao = true;
       this.dialogNovoPost = true;
@@ -152,10 +127,6 @@ export default {
       this.descricao = item.descricao;
       this.linkImagem = item.link_imagem;
     },
-
-    removePost(item) {
-      this.posts = this.posts.filter(p => p.id !== item.id);
-    }
   },
 };
 </script>

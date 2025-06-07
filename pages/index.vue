@@ -5,7 +5,7 @@
         <span class="font-weight-thin">PYRAMIDON</span>
         <div>
           <v-btn variant="outlined" class="text-yellow rounded-lg" text="Criar conta"/>
-          <v-btn class="bg-yellow rounded-lg ml-3" text="Login"/>
+          <v-btn class="bg-yellow rounded-lg ml-3" text="Login" to="login"/>
         </div>
       </v-row>
 
