@@ -59,79 +59,26 @@
 </template>
 
 <script>
-
-definePageMeta({
-  layout: false,
-});
-
-import axios from 'axios'
+  definePageMeta({
+    layout: false,
+  });
 
 export default {
+  name: 'login',
   data() {
     return {
-      window: 'login',
-      loading: false,
-      login: {
-        email: '',
-        password: ''
-      },
-      signup: {
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        cryptoKey: ''
-      }
-    }
+
+
+
+    };
   },
   methods: {
     toggleWindow() {
       this.window = this.window === 'login' ? 'signup' : 'login'
-    },
-    async loginUser() {
-      this.loading = true
-      try {
-        const res = await axios.get('http://localhost:3001/users', {
-          params: {
-            email: this.login.email,
-            password: this.login.password
-          }
-        })
-        if (res.data.length) {
-          alert('Login bem-sucedido!')
-        } else {
-          alert('Credenciais inválidas!')
-        }
-      } catch (err) {
-        alert('Erro ao fazer login.')
-      } finally {
-        this.loading = false
-      }
-    },
-    async createAccount() {
-      if (this.signup.password !== this.signup.confirmPassword) {
-        return alert('Senhas não coincidem!')
-      }
-
-      this.loading = true
-      try {
-        await axios.post('http://localhost:3001/users', {
-          name: this.signup.name,
-          email: this.signup.email,
-          password: this.signup.password,
-          cryptoKey: this.signup.cryptoKey
-        })
-
-        alert('Conta criada com sucesso!')
-        this.toggleWindow()
-      } catch (err) {
-        alert('Erro ao criar conta.')
-      } finally {
-        this.loading = false
-      }
-    }
-  }
+      },
+  },
 }
+
 </script>
 
 <style scoped>
