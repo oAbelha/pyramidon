@@ -3,17 +3,30 @@
     <v-main class="pa-5">
       <v-row class="justify-space-between">
         <h2>Marketing</h2>
-        <v-btn color="yellow" text="Nova rede social" @click="dialogNovaRedeSocial = true" />
+        <v-btn
+          color="yellow"
+          text="Nova rede social"
+          @click="dialogNovaRedeSocial = true"
+        />
       </v-row>
 
       <v-row>
-        <v-data-table class="mt-10 rounded-xl" :headers="headers" :items="redesSociais" :key="redesSociais.length" no-data-text="Nenhuma rede social cadastrada!" items-per-page-text="Redes sociais por página" :page-text="`Total de redes sociais: ${redesSociais.length}`" page="1">
+        <v-data-table
+          class="mt-10 rounded-xl"
+          :headers="headers"
+          :items="redesSociais"
+          :key="redesSociais.length"
+          no-data-text="Nenhuma rede social cadastrada!"
+          items-per-page-text="Redes sociais por página"
+          :page-text="`Total de redes sociais: ${redesSociais.length}`"
+          page="1"
+        >
           <template v-slot:top>
             <h2 class="pa-3">Gerencie suas redes</h2>
           </template>
           <template v-slot:item.actions="{ item }">
             <v-icon small color="blue" @click="editarRedeSocial(item)">mdi-pencil</v-icon>
-            <v-icon small color="red"  @click="deletarRedeSocial(item)">mdi-delete</v-icon>
+            <v-icon small color="red" @click="deletarRedeSocial(item)">mdi-delete</v-icon>
           </template>
         </v-data-table>
       </v-row>
@@ -23,22 +36,54 @@
       <v-card>
         <v-card-title>
           <v-row class="align-center justify-space-between pa-3">
-            <h3 class="text-blue">{{ modoEdicao == true ? "Editar rede social" : "Nova rede social" }}</h3>
+            <h3 class="text-blue">
+              {{ modoEdicao == true ? "Editar rede social" : "Nova rede social" }}
+            </h3>
             <v-icon @click="close" color="red" icon="mdi-close" />
           </v-row>
         </v-card-title>
         <v-card-text>
           <v-col class="d-flex flex-column ga-5">
-            <v-text-field   v-model="nomeRedeSocial" hide-details variant="outlined" label="Nome da rede social" />
-            <v-text-field   v-model="nomePerfil"     hide-details variant="outlined" label="Nome do perfil" />
-            <v-text-field   v-model="arrobaPerfil"   hide-details variant="outlined" label="Arroba do perfil" />
-            <v-text-field   v-model="linkRedeSocial" hide-details variant="outlined" label="Link de acesso" />
-            <v-text-field   v-model="responsavel"    hide-details variant="outlined" label="Responsável pela rede social" /> 
+            <v-text-field
+              v-model="nomeRedeSocial"
+              hide-details
+              variant="outlined"
+              label="Nome da rede social"
+            />
+            <v-text-field
+              v-model="nomePerfil"
+              hide-details
+              variant="outlined"
+              label="Nome do perfil"
+            />
+            <v-text-field
+              v-model="arrobaPerfil"
+              hide-details
+              variant="outlined"
+              label="Arroba do perfil"
+            />
+            <v-text-field
+              v-model="linkRedeSocial"
+              hide-details
+              variant="outlined"
+              label="Link de acesso"
+            />
+            <v-text-field
+              v-model="responsavel"
+              hide-details
+              variant="outlined"
+              label="Responsável pela rede social"
+            />
             <!-- Fazer a lógica para o campo resposável utilizando v-autocomplete, pois o mesmo deve ser preenchido com um id que vem da tabela funcionários. -->
           </v-col>
         </v-card-text>
         <v-card-actions class="justify-center pa-3">
-          <v-btn class="w-50 bg-success" color="black" text="Salvar" @click="persistRedesSociais"/>
+          <v-btn
+            class="w-50 bg-success"
+            color="black"
+            text="Salvar"
+            @click="persistRedesSociais"
+          />
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -54,19 +99,19 @@ export default {
     return {
       dialogNovaRedeSocial: false,
       modoEdicao: false,
-      RedeSocialSelecionada: null,
+      id: null,
       nomeRedeSocial: null,
-      linkRedeSocial: null,
-      arrobaPerfil: null,
       nomePerfil: null,
-      id: null, 
+      arrobaPerfil: null,
+      linkRedeSocial: null,
+      responsavel: null,
       headers: [
-        { title: "Rede social",    value: "nome_rede_social", align: "center" },
-        { title: "Perfil",         value: "nome_perfil",      align: "center" },
-        { title: "@ do perfil",    value: "arroba_perfil",    align: "center" },
-        { title: "Link de acesso", value: "link_acesso",      align: "center" },
-        { title: "Responsável",    value: "responsavel",      align: "center" },
-        { title: "Ações",          value: "actions",          align: "center", width: "100" },
+        { title: "Rede social", value: "nome_rede_social", align: "center" },
+        { title: "Perfil", value: "nome_perfil", align: "center" },
+        { title: "@ do perfil", value: "arroba_perfil", align: "center" },
+        { title: "Link de acesso", value: "link_acesso", align: "center" },
+        { title: "Responsável", value: "responsavel", align: "center" },
+        { title: "Ações", value: "actions", align: "center", width: "100" },
       ],
       redesSociais: [],
     };
@@ -84,18 +129,20 @@ export default {
       } catch (error) {
         alert("Não foi possível listar as redes sociais!");
         console.log("Erro: ", error);
-      };
+      }
     },
 
     async persistRedesSociais() {
       try {
         const request = {
           nome_rede_social: this.nomeRedeSocial,
+          nome_perfil: this.nomePerfil,
           arroba_perfil: this.arrobaPerfil,
           link_acesso: this.linkRedeSocial,
           responsavel: this.responsavel,
-          nome_perfil: this.nomePerfil,
         };
+
+        if (!this.validacoesCadastro(request)) return;
 
         if (this.id) {
           await this.$api.patch(`/marketing/patch/${this.id}`, request);
@@ -104,16 +151,17 @@ export default {
         }
 
         this.nomeRedeSocial = null;
-        this.linkRedeSocial = null;
-        this.arrobaPerfil = null;
-        this.responsavel = null;
         this.nomePerfil = null;
+        this.arrobaPerfil = null;
+        this.linkRedeSocial = null;
+        this.responsavel = null;
+        this.dialogNovaRedeSocial = false;
 
         await this.listarPerfisMarketing();
       } catch (error) {
-        alert("Erro ao listar redes sociais: ", error);
+        alert("Erro ao listar redes sociais!");
         console.log("Erro: ", error);
-      };
+      }
     },
 
     async deletarRedeSocial(item) {
@@ -121,31 +169,69 @@ export default {
         await this.$api.delete(`/marketing/delete/${item.id}`);
         await this.listarPerfisMarketing();
       } catch (error) {
-         alert("Erro ao deletar rede social: ", error);
+        alert("Erro ao deletar rede social: ", error);
         console.log("Erro: ", error);
-      };
+      }
     },
 
     editarRedeSocial(item) {
-      this.dialogNovaRedeSocial = true;
       this.modoEdicao = true;
+      this.dialogNovaRedeSocial = true;
+      this.id = item.id;
       this.nomeRedeSocial = item.nome_rede_social;
+      this.nomePerfil = item.nome_perfil;
       this.arrobaPerfil = item.arroba_perfil;
       this.linkRedeSocial = item.link_acesso;
-      this.responsavel = item.responsavel
-      this.nomePerfil = item.nome_perfil;
-      this.id = item.id;
+      this.responsavel = item.responsavel;
     },
 
     close() {
       this.dialogNovaRedeSocial = false;
       this.modoEdicao = false;
-      this.linkRedeSocial = null;
+      this.id = null;
       this.nomeRedeSocial = null;
-      this.arrobaPerfil = null;
-      this.responsavel = null;
       this.nomePerfil = null;
-      this.id = item.id;
+      this.arrobaPerfil = null;
+      this.linkRedeSocial = null;
+      this.responsavel = null;
+    },
+
+    validacoesCadastro(item) {
+      if (!item.nome_rede_social) {
+        alert("Insira o nome da rede social");
+        return;
+      }
+
+      if (!item.nome_perfil) {
+        alert("Insira o nome do perfil");
+        return;
+      }
+
+      if (!item.arroba_perfil) {
+        alert("Insira o arroba do perfil!");
+        return;
+      }
+
+      if (!this.URLValida(item.link_acesso)) {
+        alert("Informe uma URL valida para a rede social!");
+        return;
+      }
+
+      if (!item.responsavel) {
+        alert("Informe quem é o funcionário responsável pelo perfil dessa rede!");
+        return;
+      }
+
+      return true;
+    },
+
+    URLValida(str) {
+      try {
+        new URL(str);
+        return true;
+      } catch (_) {
+        return false;
+      }
     },
   },
 };
