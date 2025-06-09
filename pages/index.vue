@@ -4,7 +4,6 @@
       <v-row class="align-center justify-space-between pr-3 pl-16 py-2">
         <span class="font-weight-thin">PYRAMIDON</span>
         <div>
-          <v-btn variant="outlined" class="text-yellow rounded-lg" text="Criar conta"/>
           <v-btn class="bg-yellow rounded-lg ml-3" text="Login" to="login"/>
         </div>
       </v-row>

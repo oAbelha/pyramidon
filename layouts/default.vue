@@ -51,6 +51,10 @@ export default {
           title: 'Cryptomoeda',
           to: 'cryptomoeda',
         },
+        {
+          title: 'Perfil',
+          to: 'perfil',
+        },
       ],
     }
   },
