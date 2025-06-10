@@ -44,8 +44,8 @@ export default {
           to: 'marketing',
         },
         {
-          title: 'Objetivos',
-          to: 'objetivos',
+          title: 'Funcionários',
+          to: 'funcionarios',
         },
         {
           title: 'Cryptomoeda',
