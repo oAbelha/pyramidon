@@ -35,7 +35,12 @@
             <v-text-field v-model="perfilRedes.nomePerfil" hide-details variant="outlined" label="Nome do perfil" />
             <v-text-field v-model="perfilRedes.arrobaPerfil" hide-details variant="outlined" label="Arroba do perfil" />
             <v-text-field v-model="perfilRedes.linkAcesso" hide-details variant="outlined" label="Link de acesso" />
-            <v-text-field v-model="perfilRedes.responsavel" hide-details variant="outlined" label="Responsável pela rede social" />
+            <v-autocomplete v-model="perfilRedes.responsavel" hide-details variant="outlined" label="Responsável pela rede social"
+              :items="funcionarios"
+              item-title="nome"
+              item-value="id"
+              no-data-text="Não há funcionarios"
+            ></v-autocomplete>
           </v-col>
         </v-card-text>
         <v-card-actions class="justify-center pa-3">
@@ -55,6 +60,7 @@ export default {
     return {
       dialogNovaRedeSocial: false,
       modoEdicao: false,
+      funcionarios: [],
       redesSociais: [],
       perfilRedes: {},
       headers: [
@@ -75,11 +81,10 @@ export default {
   methods: {
     async listarPerfisMarketing() {
       try {
-        const { data: response } = await this.$api.get("/marketing/get");
-        this.redesSociais = response.data;
+        const { data } = await this.$api.get("/marketing/get");
+        this.redesSociais = data.data;
       } catch (error) {
-        alert("Não foi possível listar as redes sociais!");
-        console.log("Erro: ", error);
+        console.log(error);
       }
     },
 
@@ -96,9 +101,11 @@ export default {
         if (!this.validacoesCadastro(request)) return;
 
         if (this.perfilRedes.id) {
-          await this.$api.patch(`/marketing/patch/${this.perfilRedes.id}`, request);
+          const { data } = await this.$api.patch(`/marketing/patch/${this.perfilRedes.id}`, request);
+          console.log(data.message);
         } else {
-          await this.$api.post(`/marketing/post`, request);
+          const { data } = await this.$api.post(`/marketing/post`, request);
+          console.log(data.message);
         }
 
         this.dialogNovaRedeSocial = false;
@@ -106,8 +113,7 @@ export default {
 
         await this.listarPerfisMarketing();
       } catch (error) {
-        alert("Erro ao listar redes sociais!");
-        console.log("Erro: ", error);
+        console.log(error);
       }
     },
 

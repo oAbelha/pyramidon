@@ -32,10 +32,6 @@ export default {
       drawer: false,
       navigation: [
         {
-          title: 'Dashboard',
-          to: 'dashboard',
-        },
-        {
           title: 'Colaboradores',
           to: 'colaboradores',
         },

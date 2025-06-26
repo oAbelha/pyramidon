@@ -5,8 +5,10 @@
           <v-card-title class="text-center">
             <h1>{{ !login ? 'Criar Conta' : 'Entrar' }}</h1>
           </v-card-title>
+
           <v-card-text>
             <v-window v-model="window">
+
               <v-window-item value="1" class="justify-center">
                 <v-col>
                   <v-text-field v-model="nome" label="Nome" prepend-icon="mdi-account" />
@@ -16,26 +18,27 @@
                   <v-text-field v-model="chaveCrypto" label="Chave Crypto" prepend-icon="mdi-key" />
                 </v-col>
               </v-window-item>
+
               <v-window-item value="2" class="justify-center">
                 <v-col>
                   <v-text-field v-model="email" label="Email" prepend-icon="mdi-email" />
                   <v-text-field v-model="senha" label="Senha" prepend-icon="mdi-lock" :type="show1 ? 'password' : 'text'" :append-inner-icon="show1 ? 'mdi-eye-off' : 'mdi-eye'" @click:append-inner="show1 = !show1" />
                 </v-col>
               </v-window-item>
+
             </v-window>
           </v-card-text>
+
           <v-card-actions>
             <v-col class="align-center d-flex flex-column ga-5" >
               <v-btn @click="login ? validaLogin() : criaConta()" variant="outlined" color="red" class="font-weight-bold w-25" >
-                <span v-if="!loading">{{ !login ? 'Criar Conta' : 'Entrar'  }}</span>
-                <template v-if="loading">
-                  <v-progress-circular indeterminate color="blue" size="20" />
-                </template>
+                <span>{{ login ? 'Entrar' : 'Criar conta'  }}</span>
               </v-btn>
               <v-btn :text="!login ? 'Ja Tenho Conta' : 'Nao Tenho Conta'" @click="controlaLogin" variant="outlined"
                 color="yellow" class="font-weight-bold w-25" />
             </v-col>
           </v-card-actions>
+
         </v-card>
       </v-row>
   </v-app>
@@ -50,9 +53,8 @@ export default {
   nome: 'login',
   data() {
     return {
-      window: 0,
-      loading: false,
-      login: false,
+      window: 1,
+      login: true,
       email: null,
       nome: null,
       senha: null,
@@ -60,9 +62,11 @@ export default {
       show1: false,
       show2: false,
       chaveCrypto: null,
-      role: null,
-      roles: ['funcionario', 'colaborador'],
     };
+  },
+
+  async created() {
+    console.log(await this.$api.get('contas/get'));
   },
 
   methods: {
@@ -75,28 +79,34 @@ export default {
           chaveCrypto: this.chaveCrypto,
         };
         const response = await this.$api.post('/contas/post', req);
-        console.log(response.data);
+        
         if(response.data.type === 'success') {
+          localStorage.setItem('conta', JSON.stringify(data.data));
           this.$router.push('organizacoes');
         }
-        
       } catch (error) {
         console.log(error);
       }
     },
 
-    validaLogin() {
-      if(this.login) {
-        this.loading=true
-        if(this.email==='teste@gmail.com' && this.senha==='1234') {
-          this.$router.push({nome:'perfil'}) //mudar para tela de dashboard quando a mesma existir
-          return
+    async validaLogin() {
+      try {
+        const req = {
+          email: this.email,
+          senha: this.senha,
         };
 
-        alert("Email ou senha incorretos")
-        this.loading=false
-        return
-      };
+        const { data } = await this.$api.post(`/contas/login`, req);
+        console.log(data.message);
+        
+        if(data.type === 'success') {
+          localStorage.setItem('conta', JSON.stringify(data.data));
+          this.$router.push({ name: 'organizacoes' });
+        }
+      }
+      catch(err) {
+        console.log(err);
+      }
     },
     
     controlaLogin() {
