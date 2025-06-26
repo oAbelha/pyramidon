@@ -29,20 +29,20 @@
         </v-card-title>
         <v-card-text>
           <v-col class="d-flex flex-column ga-5">
-            <v-text-field   v-model="nomecolaborador" hide-details variant="outlined" label="Nome do Colaborador" />
-            <v-text-field   v-model="email"     hide-details variant="outlined" label="Email do Colaborador" />
-            <v-text-field   v-model="cpf"   hide-details variant="outlined" label="CPF do Colaborador" />
-            <v-text-field   v-model="telefone" hide-details variant="outlined" label="Telefone do Colaborador" />
-            <v-text-field   v-model="cep"    hide-details variant="outlined" label="CEP do Colaborador" />
-            <v-text-field   v-model="banco"    hide-details variant="outlined" label="Banco do Colaborador" />
-            <v-text-field   v-model="numeroCartao"    hide-details variant="outlined" label="Numero do cartão do Colaborador" />
-            <v-text-field   v-model="senhaCartao"    hide-details variant="outlined" label="Senha do Cartão do Colaborador" />
-            <v-text-field   v-model="cvv"    hide-details variant="outlined" label="CVV do Cartão" />
-            <v-text-field   v-model="vencimentoCartao"    hide-details variant="outlined" label="Vencimento do Cartão" />
+            <v-text-field   v-model="this.colaborador.nome" hide-details variant="outlined" label="Nome do Colaborador" />
+            <v-text-field   v-model="this.colaborador.email"     hide-details variant="outlined" label="Email do Colaborador" />
+            <v-text-field   v-model="this.colaborador.cpf"   hide-details variant="outlined" label="CPF do Colaborador" />
+            <v-text-field   v-model="this.colaborador.telefone" hide-details variant="outlined" label="Telefone do Colaborador" />
+            <v-text-field   v-model="this.colaborador.cep"    hide-details variant="outlined" label="CEP do Colaborador" />
+            <v-text-field   v-model="this.colaborador.banco"    hide-details variant="outlined" label="Banco do Colaborador" />
+            <v-text-field   v-model="this.colaborador.numeroCartao"    hide-details variant="outlined" label="Numero do cartão do Colaborador" />
+            <v-text-field   v-model="this.colaborador.senhaCartao"    hide-details variant="outlined" label="Senha do Cartão do Colaborador" />
+            <v-text-field   v-model="this.colaborador.senhaSeguranca"    hide-details variant="outlined" label="CVV do Cartão" />
+            <v-text-field   v-model="this.colaborador.dataVencimentoCartao"    hide-details variant="outlined" label="Vencimento do Cartão" />
           </v-col>
         </v-card-text>
         <v-card-actions class="justify-center pa-3">
-          <v-btn class="w-50 bg-success" color="black" text="Salvar" @click="persistcolaboradores"/>
+          <v-btn class="w-50 bg-success" color="black" text="Salvar" @click="persistColaboradores"/>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -58,21 +58,10 @@ data() {
   return {
     dialogNovoColaborador: false,
     modoEdicao: false,
-    colaboradorSelecionado: null,
-    nomecolaborador: null,
-    email: null,
-    cpf: null,
-    telefone: null,
-    cep: null,
-    banco: null,
-    numeroCartao: null,
-    senhaCartao: null,
-    cvv: null,
-    vencimentoCartao: null,
-    id: null,
+    colaborador: {},
     colaboradores: [], 
     headers: [
-      { title: "Colaborador", value: "nomecolaborador", align: "center" },
+      { title: "Colaborador", value: "nome", align: "center" },
       { title: "Email", value: "email", align: "center" },
       { title: "CPF", value: "cpf", align: "center" },
       { title: "Telefone", value: "telefone", align: "center" },
@@ -80,8 +69,8 @@ data() {
       { title: "Banco", value: "banco", align: "center" },
       { title: "Numero do Cartão", value: "numeroCartao", align: "center" },
       { title: "Senha do Cartão", value: "senhaCartao", align: "center" },
-      { title: "CVV", value: "cvv", align: "center" },
-      { title: "Vencimento do Cartão", value: "vencimentoCartao", align: "center" },
+      { title: "CVV", value: "senhaSeguranca", align: "center" },
+      { title: "Vencimento do Cartão", value: "dataVencimentoCartao", align: "center" },
       { title: "Ações", value: "actions", align: "center" },
     ],
   };
@@ -95,50 +84,47 @@ data() {
   methods: {
     async listarColaboradores() {
       try {
-        const { data: response } = await this.$api.get("/colaboradores/get");
-        this.colaboradores = response.data;
+        const org = JSON.parse(localStorage.getItem('organizacao'));
+        const { data } = await this.$api.get(`/colaboradores/get/${org.id}`);
+        
+        if(data.type === 'success') {
+          console.log(data.message);
+          this.colaboradores = data.data;
+        }
       } catch (error) {
-        alert("Não foi possível listar os Colaboradores");
-        console.log("Erro: ", error);
+        console.log(error);
       };
     },
 
     async persistColaboradores() {
       try {
         const request = {
-          nome_colaboradores: this.nomeColaboradores,
-          email: this.email,
-          cpf: this.cpf,
-          telefone: this.telefone,
-          cep: this.cep,
-          banco: this.banco,
-          numeroCartao: this.numeroCartao,
-          senhaCartao: this.senhaCartao,
-          cvv: this.cvv,
-          vencimentoCartao: this.vencimentoCartao,
+          nome: this.colaborador.nome,
+          email: this.colaborador.email,
+          cpf: this.colaborador.cpf,
+          telefone: this.colaborador.telefone,
+          cep: this.colaborador.cep,
+          banco: this.colaborador.banco,
+          numeroCartao: this.colaborador.numeroCartao,
+          senhaCartao: this.colaborador.senhaCartao,
+          senhaSeguranca: this.colaborador.senhaSeguranca,
+          dataVencimentoCartao: this.colaborador.dataVencimentoCartao,
         };
 
-        if (this.id) {
-          await this.$api.patch(`/colaboradores/patch/${this.id}`, request);
+        if (this.colaborador.id) {
+          const { data } = await this.$api.patch(`/colaboradores/patch/${this.colaborador.id}`, request);
+          console.log(data.message);
         } else {
-          await this.$api.post(`/colaboradores/post`, request);
+          const org = JSON.parse(localStorage.getItem('organizacao'));
+          const { data } = await this.$api.post(`/colaboradores/cria-colaborador/${org.id}`, request);
+          console.log(data.message);
         }
 
-        this.nomeColaboradores = null;
-        this.cpf = null;
-        this.email = null;
-        this.telefone = null;
-        this.cep = null;
-        this.banco = null;
-        this.numeroCartao = null;
-        this.senhaCartao = null;
-        this.cvv = null;
-        this.vencimentoCartao = null;
+        this.close();
 
         await this.listarColaboradores();
       } catch (error) {
-        alert("Erro ao listar colaboradores: ", error);
-        console.log("Erro: ", error);
+        console.log(error);
       };
     },
 
@@ -147,41 +133,19 @@ data() {
         await this.$api.delete(`/colaboradores/delete/${item.id}`);
         await this.listarColaboradores();
       } catch (error) {
-         alert("Erro ao deletar colaborador: ", error);
-        console.log("Erro: ", error);
+        console.log(error);
       };
     },
 
     editarColaboradores(item) {
       this.dialogNovoColaborador = true;
-      this.modoEdicao = true;
-      this.nomeColaboradores = item.nome_colaboradores;
-      this.email = item.email;
-      this.cpf = item.cpf;
-      this.telefone = item.telefone
-      this.cep = item.cep;
-      this.banco = item.banco;
-      this.numeroCartao = item.numeroCartao
-      this.senhaCartao = item.senhaCartao
-      this.cvv = item.cvv
-      this.vencimentoCartao = item.vencimentoCartao
-      this.id = item.id;
+      this.colaborador = item;
+      console.log(this.colaborador);
     },
 
     close() {
       this.dialogNovoColaborador = false;
-      this.modoEdicao = false;
-      this.cpf = null;
-      this.nomeColaboradores = null;
-      this.email = null;
-      this.telefone = null;
-      this.cep = null;
-      this.banco = null;
-      this.numeroCartao = null;
-      this.senhaCartao = null;
-      this.cvv = null;
-      this.vencimentoCartao = null;
-      this.id = item.id;
+      this.colaborador = {};
     },
   },
 };
