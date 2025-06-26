@@ -13,6 +13,12 @@
           <template v-slot:top>
             <h2 class="pa-3">Gerencie suas redes</h2>
           </template>
+          <template v-slot:item.arrobaPerfil="{ item }">
+            @{{ item.arrobaPerfil }}
+          </template>
+          <template v-slot:item.responsavel="{ item }">
+            {{ this.funcionarios.filter(f => f.id === item.responsavel)[0]?.nome }}
+          </template>
           <template v-slot:item.actions="{ item }">
             <v-icon small color="blue" @click="editarRedeSocial(item)">mdi-pencil</v-icon>
             <v-icon small color="red" @click="deletarRedeSocial(item)">mdi-delete</v-icon>
@@ -76,6 +82,7 @@ export default {
 
   async created() {
     await this.listarPerfisMarketing();
+    await this.getFuncionarios();
   },
 
   methods: {
@@ -83,6 +90,15 @@ export default {
       try {
         const { data } = await this.$api.get("/marketing/get");
         this.redesSociais = data.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getFuncionarios() {
+      try {
+        const { data } = await this.$api.get("/funcionarios/get");
+        this.funcionarios = data.data;        
       } catch (error) {
         console.log(error);
       }

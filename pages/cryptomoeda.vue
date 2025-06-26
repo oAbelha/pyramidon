@@ -12,8 +12,8 @@
       <template v-slot:top>
         <h2 class="pa-3">Gerenciar moedas crypto</h2>
       </template>
-      <template v-slot:item.nome="{ item }">
-        <span>${{ item.nome }}</span>
+      <template v-slot:item.tagMercado="{ item }">
+        <span>${{ item.tagMercado }}</span>
       </template>
       <template v-slot:item.valor="{ item }">
         <span>R$ {{ item.valor }}</span>

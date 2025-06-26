@@ -65,10 +65,6 @@ export default {
     };
   },
 
-  async created() {
-    console.log(await this.$api.get('contas/get'));
-  },
-
   methods: {
     async criaConta() {
       try {
@@ -81,7 +77,8 @@ export default {
         const response = await this.$api.post('/contas/post', req);
         
         if(response.data.type === 'success') {
-          localStorage.setItem('conta', JSON.stringify(data.data));
+          
+          localStorage.setItem('conta', JSON.stringify(response.data.data));
           this.$router.push('organizacoes');
         }
       } catch (error) {
