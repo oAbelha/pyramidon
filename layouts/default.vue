@@ -3,7 +3,7 @@
     <v-app-bar>
       <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-row class="align-center justify-end ga-3">
-        <h2>Meu perfil</h2>
+        <h2>{{ conta ? conta.nome : 'MEU PERFIL' }}</h2>
         <v-icon class="mr-5">mdi-account</v-icon>
       </v-row>
     </v-app-bar>
@@ -30,18 +30,19 @@ export default {
     return {
       model: false,
       drawer: false,
+      conta: JSON.parse(localStorage.getItem('conta')),
       navigation: [
         {
           title: 'Colaboradores',
           to: 'colaboradores',
         },
         {
-          title: 'Marketing',
-          to: 'marketing',
-        },
-        {
           title: 'Funcionários',
           to: 'funcionarios',
+        },
+        {
+          title: 'Marketing',
+          to: 'marketing',
         },
         {
           title: 'Cryptomoeda',
