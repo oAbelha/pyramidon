@@ -18,13 +18,17 @@
       <template v-slot:item.valor="{ item }">
         <span>R$ {{ item.valor }}</span>
       </template>
+      <template v-slot:item.aberta="{ item }">
+        <span>{{ item.aberta ? 'SIM' : 'NÃO' }}</span>
+      </template>
       <template v-slot:item.actions="{ item }">
+        <v-icon color="yellow" @click="abreDialogAbreFechaMoeda(item)">mdi-information</v-icon>
         <v-icon small color="blue" @click="editar(item)">mdi-pencil</v-icon>
         <v-icon small color="red" @click="deletar(item.id)">mdi-delete</v-icon>
       </template>
     </v-data-table>
 
-    <v-dialog v-model="dialog" max-width="750">
+    <v-dialog v-model="dialog" max-width="500px">
       <v-card>
         <v-card-title>
           <h1>{{ modoEdicao ? 'Modo de Edição' : 'Crie uma nova moeda' }}</h1>
@@ -55,6 +59,21 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog
+      v-model="dialogAbreFechaMoeda"
+      max-width="500px"
+    >
+      <v-card>
+        <v-card-title>
+          {{ moeda.aberta ? 'Fechar a moeda?' : 'Abrir a moeda?'}}
+        </v-card-title>
+        <v-card-actions>
+          <v-btn color="red" @click="dialogAbreFechaMoeda = false; moeda = {};">não</v-btn>
+          <v-btn color="blue" @click="abreFechaMoeda">sim</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -66,6 +85,7 @@ export default {
   data() {
     return {
       dialog: false,
+      dialogAbreFechaMoeda: false,
       modoEdicao: false,
       moeda: {},
       moedas: [
@@ -75,7 +95,7 @@ export default {
           quantidadeDisponivel: 100,
           quantidadePossuida: 100,
           valor: 0.015,
-          aberta: 'SIM',
+          aberta: 0,
         },
         {
           nome: 'Pyramidcoin',
@@ -83,7 +103,7 @@ export default {
           quantidadeDisponivel: 100,
           quantidadePossuida: 100,
           valor: 0.015,
-          aberta: 'SIM',
+          aberta: 1,
         },
         {
           nome: 'Pyramidcoin',
@@ -91,7 +111,7 @@ export default {
           quantidadeDisponivel: 100,
           quantidadePossuida: 100,
           valor: 0.015,
-          aberta: 'SIM',
+          aberta: 1,
         },
         {
           nome: 'Pyramidcoin',
@@ -99,7 +119,7 @@ export default {
           quantidadeDisponivel: 100,
           quantidadePossuida: 100,
           valor: 0.015,
-          aberta: 'SIM',
+          aberta: 1,
         },
       ],
       headers: [
@@ -109,13 +129,30 @@ export default {
         { title: "quantidade possuída", value: "quantidadePossuida", align: "center", width: "10%" },
         { title: "valor", value: "valor", align: "center" },
         { title: "aberta", value: "aberta", align: "center" },
-        { title: "organização", value: "idOrganizacao", align: "center" },
         { title: "Ações", value: "actions", align: "center" },
       ]
     }
   },
 
+  async created() {
+    await this.getMoedas();
+  },
+
   methods: {
+    async getMoedas() {
+      try {
+        const { data } = await this.$api.get(`crypto/get`);
+        this.moedas = data.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    abreDialogAbreFechaMoeda(item) {
+      this.moeda = item;
+      this.dialogAbreFechaMoeda = true;
+    },
+
     editar(item) {
       this.modoEdicao = true;
       this.moeda = item;
@@ -130,7 +167,13 @@ export default {
 
     async deletar(id) {
       try {
-        const response = await this.$api.delete(`/crypto/delete/${id}`);
+        const { data } = await this.$api.delete(`/crypto/delete/${id}`);
+
+        if(data.type === 'success') {
+          console.log('Item deletado com sucesso');
+        }
+
+        await this.getMoedas();
       }
       catch(err) {
         console.log(err);
@@ -138,12 +181,51 @@ export default {
     },
 
     async persist() {
-      if(this.modoEdicao) {
-
-      } else {
+      try {
         const req = {
-
+          nome: this.moeda.nome,
+          tagMercado: this.moeda.tagMercado,
+          quantidadeDisponivel: this.moeda.quantidadeDisponivel,
+          quantidadePossuida: this.moeda.quantidadeDisponivel,
+          valor: this.moeda.valor,
+          aberta: false,
+          idOrganizacao: 1,
         }
+  
+        if(this.modoEdicao) {
+          const { data } = await this.$api.patch(`/crypto/patch/${this.moeda.id}`, req);
+  
+          if(data.type === 'success') {
+            console.log('Requisição deu certo');
+          }
+        } else {
+          const { data } = await this.$api.post(`/crypto/post`, req);
+  
+          if(data.type === 'success') {
+            console.log('Requisição deu certo');
+          }
+        }
+
+        await this.getMoedas();
+        this.fechaDialog();
+      }
+      catch(err) {
+        console.log(err);
+      }
+    },
+
+    async abreFechaMoeda() {
+      try {
+        const { data } = await this.$api.patch(`/crypto/patch/abre-fecha-moeda/${this.moeda.id}`);
+
+        if(data.type === 'success') {
+          console.log('Status da moeda foi alterado com sucesso');
+        }
+
+        await this.getMoedas();
+        this.dialogAbreFechaMoeda = false;
+      } catch (err) {
+        console.log(err);
       }
     },
   }
