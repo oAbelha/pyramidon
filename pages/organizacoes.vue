@@ -101,20 +101,7 @@ export default {
       conta: JSON.parse(localStorage.getItem('conta')),
       nome: null,
       organizacao: {},
-      organizacoes: [
-        {
-          titulo: 'Pyramidon',
-          link: '/dashboard',
-        },
-        {
-          titulo: 'Cassinão',
-          link: '/dashboard',
-        },
-        {
-          titulo: 'Tigrinho',
-          link: '/dashboard',
-        },
-      ],
+      organizacoes: [],
     }
   },
 
