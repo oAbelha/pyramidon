@@ -108,7 +108,8 @@ export default {
   methods: {
     async getMoedas() {
       try {
-        const { data } = await this.$api.get(`crypto/get`);
+        const org = JSON.parse(localStorage.getItem('organizacao'));
+        const { data } = await this.$api.get(`crypto/get/${org.id}`);
         this.moedas = data.data;
       } catch (error) {
         console.log(error);

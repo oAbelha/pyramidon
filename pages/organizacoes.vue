@@ -24,7 +24,7 @@
         >
           <v-card-title>
             <div class="d-flex align-center justify-space-between">
-              <h3>{{ org.nome }}</h3>
+              <h3 class="w-75" style="overflow: hidden; text-overflow: ellipsis;">{{ org.nome }}</h3>
               <v-btn
                 flat
                 icon="mdi-pencil"
@@ -34,9 +34,6 @@
           </v-card-title>
 
           <v-card-text>
-            <div>
-              Número de funcionarios: {{ org.quantidadeFuncionarios }}
-            </div>
             <div>
               Em funcionamento: {{ org.emFuncionamento ? 'SIM' : 'NÃO' }}
             </div>

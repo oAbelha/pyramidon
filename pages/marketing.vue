@@ -88,7 +88,10 @@ export default {
   methods: {
     async listarPerfisMarketing() {
       try {
-        const { data } = await this.$api.get("/marketing/get");
+        const org = JSON.parse(localStorage.getItem('organizacao'));
+        const { data } = await this.$api.get(`/marketing/get/${org.id}`);
+        console.log(data);
+        
         this.redesSociais = data.data;
       } catch (error) {
         console.log(error);
@@ -97,7 +100,8 @@ export default {
 
     async getFuncionarios() {
       try {
-        const { data } = await this.$api.get("/funcionarios/get");
+        const org = JSON.parse(localStorage.getItem('organizacao'));
+        const { data } = await this.$api.get(`/funcionarios/get/${org.id}`);
         this.funcionarios = data.data;        
       } catch (error) {
         console.log(error);
@@ -112,6 +116,7 @@ export default {
           arrobaPerfil: this.perfilRedes.arrobaPerfil,
           linkAcesso: this.perfilRedes.linkAcesso,
           responsavel: this.perfilRedes.responsavel,
+          idOrganizacao: JSON.parse(localStorage.getItem('organizacao')).id,
         };
 
         if (!this.validacoesCadastro(request)) return;
@@ -120,7 +125,8 @@ export default {
           const { data } = await this.$api.patch(`/marketing/patch/${this.perfilRedes.id}`, request);
           console.log(data.message);
         } else {
-          const { data } = await this.$api.post(`/marketing/post`, request);
+          const org = JSON.parse(localStorage.getItem('organizacao'));
+          const { data } = await this.$api.post(`/marketing/post/${org.id}`, request);
           console.log(data.message);
         }
 

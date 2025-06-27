@@ -71,7 +71,8 @@ export default {
   methods: {
     async getFuncionarios() {
       try {
-        const { data } = await this.$api.get("/funcionarios/get");
+        const org = JSON.parse(localStorage.getItem('organizacao'));
+        const { data } = await this.$api.get(`/funcionarios/get/${org.id}`);
         console.log(data.message);
         if(data.type === 'success') {
           this.funcionarios = data.data;
